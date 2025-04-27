@@ -47,6 +47,10 @@ public class Startup
         services.AddScoped<ValidateEmployeeForCompanyExistsAttribute>();
         services.AddScoped<IDataShaper<EmployeeDto>, DataShaper<EmployeeDto>>();
         services.ConfigureVersioning();
+        services.AddAuthentication();
+        services.ConfigureIdentity();
+        services.ConfigureJWT(Configuration);
+        services.AddScoped<IAuthenticationManager, AuthenticationManager>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -71,9 +75,8 @@ public class Startup
         });
 
         app.UseRouting();
-
+        app.UseAuthentication();
         app.UseAuthorization();
-
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
